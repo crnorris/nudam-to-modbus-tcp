@@ -1,7 +1,7 @@
 # nudam-to-modbus-tcp
 Utility that allows access to NuDAM serial devices through Modbus TCP.
 
-Adlink's NuDAM remote I/O modules use a proprietary serial protocol over RS-485, rather than the common Modbus RTU, and is not compatible with Modbus RTU. However, the protocol is similar enough that translation is possible. This software runs on a PC and allows software designed to work with Modbus TCP to access the proprietary NuDAM bus. I originally wrote this so that my ND-6018 modules can be used with ModbusScope (https://github.com/ModbusScope/) which is very convenient.
+Adlink's NuDAM remote I/O modules use a proprietary serial protocol over RS-485, rather than the common Modbus RTU, and is not compatible with Modbus RTU. However, the protocol is similar enough that translation is possible. This software runs on a PC and allows software designed to work with Modbus TCP to access the proprietary NuDAM bus. I originally wrote this so that my ND-6018 modules can be used with ModbusScope (https://github.com/ModbusScope/) which is very convenient (this project is not affiliated with ModbusScope).
 
 Important notes:
 
@@ -30,4 +30,4 @@ Note that I don't need to specify the addresses of my NuDAM modules. This is bec
 
 # Floating Point Values
 
-Rather than trying to support "real" floating point values, I have simply provided extra input registers. Reading input register 1 will give you the value x1, reading input register 11 will give you the value x10, and reading input register 101 will give you the value x100. ModbusScope allows you to divide this back down again to have the data displayed as floating point. For example, I have an expression in my "Register Settings" window of `${30021@3}/100`, which represents a T type thermocouple connected to one of my ND-6018 modules.
+Rather than trying to support "real" floating point values, I have simply provided extra input registers. Reading input register 1 will give you the value x1, reading input register 11 will give you the value x10, and reading input register 21 will give you the value x100. ModbusScope allows you to divide this back down again to have the data displayed as floating point. For example, I have an expression in my "Register Settings" window of `${30021@3}/100`, which represents a T type thermocouple connected to one of my ND-6018 modules. The data is received as an integer x100 larger than it should be, and then ModbusScope divides it back to its proper value.
