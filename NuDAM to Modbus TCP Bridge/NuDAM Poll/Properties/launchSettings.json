@@ -1,0 +1,24 @@
+{
+  "profiles": {
+    "NuDAM Poll Read Model": {
+      "commandName": "Project",
+      "commandLineArgs": "model -p COM8 -a 0"
+    },
+    "NuDAM Poll Read Analog ch0": {
+      "commandName": "Project",
+      "commandLineArgs": "analog -p COM8 -c 0 -s true"
+    },
+    "NuDAM Poll Read Configuration": {
+      "commandName": "Project",
+      "commandLineArgs": "readconf -p COM8 -a 1 -b 115200 -s true"
+    },
+    "NuDAM Poll Write Configuration": {
+      "commandName": "Project",
+      "commandLineArgs": "setconf601x -p COM8 -a 0 --ainrange 0F --newaddr 1 --setchecksum true -b 115200 -s true"
+    },
+    "NuDAM Poll Enable Checksum": {
+      "commandName": "Project",
+      "commandLineArgs": "setconf601x -p COM8 --ainrange 0F --setchecksum true"
+    }
+  }
+}

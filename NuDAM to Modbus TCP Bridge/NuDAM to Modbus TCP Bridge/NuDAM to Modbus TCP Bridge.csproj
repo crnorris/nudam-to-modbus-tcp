@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>NuDAM_to_Modbus_TCP_Bridge</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>nudammodbustcp</AssemblyName>
+    <Product>NuDAM Modbus TCP</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NuDAMModbusTCPServer\NuDAMModbusServer.csproj" />
+  </ItemGroup>
+
+</Project>

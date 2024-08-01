@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NuDAM to Modbus TCP Bridge": {
+      "commandName": "Project",
+      "commandLineArgs": "-v -b 115200 -s -p COM5 -z"
+    }
+  }
+}
