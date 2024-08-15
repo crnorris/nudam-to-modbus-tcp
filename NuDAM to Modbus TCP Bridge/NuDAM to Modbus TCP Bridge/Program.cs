@@ -17,6 +17,7 @@ namespace NuDAM_to_Modbus_TCP_Bridge
             if (o.Verbose)
             {
                 server.OnValidActivity += Server_OnValidActivity;
+                server.OnNModbusLog += Server_OnNModbusLog;
             }
 
             server.OnInvalidActivity += Server_OnInvalidActivity;
@@ -34,9 +35,10 @@ namespace NuDAM_to_Modbus_TCP_Bridge
 
             _ = server.Start(cancellationTokenSource.Token);
 
-            Console.WriteLine("Press any key to stop...");
 
-            Console.ReadKey();
+            Console.WriteLine("Press any key followed by enter to stop...");
+            Console.Read();
+
             cancellationTokenSource.Cancel();
         }
 
@@ -74,6 +76,11 @@ namespace NuDAM_to_Modbus_TCP_Bridge
             NuDAMModbusTCPServer.ActivityEventArgs e = ex.ActivityEventArgs;
             GetFirstAndLastRegister(e, out int first, out int last);
             Console.Error.WriteLine($"EXCEPTION OCURRED: \"{ex.Exception.Message}\". WHILE CARRYING OUT REQUEST: {e.RequestType}: Unit={e.UnitID}, {e.RegisterType} Register, {first}{(e.RegisterCount > 1 ? $" to {last} inclusive" : "")}");
+        }
+
+        private static void Server_OnNModbusLog(object? sender, string msg)
+        {
+            Console.WriteLine($"NModbus: {msg}");
         }
 
         private static void Server_OnInvalidActivity(object? sender, NuDAMModbusTCPServer.ActivityEventArgs e)

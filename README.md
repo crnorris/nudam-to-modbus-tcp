@@ -30,6 +30,24 @@ I have my NuDAM modules set to run at 115,200bps, and checksums enabled. My NuDA
 
 Note that I don't need to specify the addresses of my NuDAM modules. This is because Modbus TCP still includes the unit ID. The unit ID included in the Modbus TCP packet will be used as the address for the NuDAM module.
 
+Beware that the registers may be off by +1 compared to what is written on your NuDAM module. This is because officially, Modbus numbers registers starting from 1, whereas the NuDAM modules are labelled starting from 0. So to read the input labelled "Vin0" on my ND-6018, try reading input register 1. If your software allows you to use 0 based numbering, I recommend you enable that to avoid confusion.
+
 # Floating Point Values
 
 Rather than trying to support "real" floating point values, I have simply provided extra input registers. Reading input register 1 will give you the value x1, reading input register 11 will give you the value x10, and reading input register 21 will give you the value x100. ModbusScope allows you to divide this back down again to have the data displayed as floating point. For example, I have an expression in my "Register Settings" window of `${30021@3}/100`, which represents a T type thermocouple connected to one of my ND-6018 modules. The data is received as an integer x100 larger than it should be, and then ModbusScope divides it back to its proper value.
+
+# Running on Linux
+
+This software can run on Linux. For now please download the source and build it yourself.
+
+When running on Linux, you'll need to use a path to the serial device like `/dev/ttyUSB0` or `/dev/ttyACM0` instead of `COM1` or similar like you would use on Windows.
+
+Also beware that you'll have to do some extra work to use port 502 (standard port for Modbus TCP) because it's in the privileged range of ports. Running the program as root will work, but it's not good practise.
+
+A simple solution is to simply have this program use a different port which is not in the privileged range. So if your software can work with Modbus TCP on another port, try that. It can be configured easily in ModbusScope, modpoll, and probably most other applications. This method lets you bypass the whole privileged ports issue and I recommend using it if you can.
+
+For example you might run:
+
+`./nudammodbustcp -b 115200 -s -p /dev/ttyUSB0 -t 23502`
+
+Where the `-t` option is used to select a different port. In this example I used 23502 which is not privileged, doesn't seem to have any registered use, and still ends in 502, making it easier to remember.

@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace NuDAMModbusServer
 {
-    public class NuDAMModbusTCPServer
+    public class NuDAMModbusTCPServer : IModbusLogger
     {
         public const UInt16 DefaultModbusTCPPort = 502;
         private const byte MaxUnitID = 255;
@@ -20,7 +20,7 @@ namespace NuDAMModbusServer
 
             tcpListener = new(IPAddress.Any, tcpPort);
 
-            ModbusFactory factory = new();
+            ModbusFactory factory = new(logger:this);
             network = factory.CreateSlaveNetwork(tcpListener);
 
             for (int i = 0; i <= MaxUnitID; i++)
@@ -43,6 +43,8 @@ namespace NuDAMModbusServer
 
         public event EventHandler<ActivityEventArgs>? OnValidActivity;
 
+        public event EventHandler<string>? OnNModbusLog;
+
         public enum RegisterType
         {
             Input,
@@ -63,6 +65,14 @@ namespace NuDAMModbusServer
             AnalogDataChannel0_integer_x10 = 10,
             AnalogDataChannel0_integer_x100 = 20,
             AnalogDataChannel0_float_32bit = 50,
+        }
+
+        public void Log(LoggingLevel level, string message) => OnNModbusLog?.Invoke(this, message);
+
+        public bool ShouldLog(LoggingLevel level)
+        {
+            // TODO ignore for now
+            return true;
         }
 
         public async Task Start(CancellationToken cancellationToken)
